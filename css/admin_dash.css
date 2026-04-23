@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+/* START OF NAVBAR ON TOP OF ANNOUNCEMENT */
+.logout {
+    position: absolute;
+    top: 40;
+    right: 40;
+    
+}
+.logout i,
+.logout span {
+    color: var(--red);
+}
+/* END OF NAVBAR ON TOP OF ANNOUNCEMENT */
+
+
+/* <!-- START OF ANNOUNCEMENT SPACE --> */
+.tbody-holder {
+	background-color: rgba(144, 238, 144, 0.2);
+    border-radius: 10%;
+}
+    
+.tbody-holder tr td {
+    word-wrap: break-word;
+}
+
+.table-holder {
+    border-radius: 12px;
+	table-layout: fixed; 
+    width: 100%;
+    background-color: rgba(144, 238, 144, 0.2);
+}
+/* <!-- END OF ANNOUNCEMENT SPACE --> */
+
+/* START OF DASHBOARD TXT */
+.left h1{
+    font-size: x-large!important;
+    margin-top: 10%;
+}
+.center {
+    margin-top: 1.5%;
+}
+/* END OF DASHBOARD TXT */
+
+
+/* START OF CURRENT TIME AND DATE */
+.date-time h1 {
+    font-weight: 1;
+    font-size: large;
+}
+.date-time span {
+    font-weight: bold;
+    font-size: larger
+}
+/* END OF CURRENT TIME AND DATE */
+
+/* START OF GRID LOGOS */
+  /* Style for the grid container */
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Style for each grid item (logo and caption) */
+.grid-item {
+    text-align: center;
+}
+
+/* Style for the logo image */
+.logo-icon {
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    font-size: 450%;
+    align-items: center;
+    align-content: center;
+    align-self: center;
+    justify-content: center;
+}
+
+/* Hover icon color change */
+.logo-icon:hover {
+    color: #6ccb68;
+}
+
+
+/* Style for the caption */
+.caption {
+    font-size: x-small;
+}
+#ucaption {
+    margin-top: 9%;
+}
+.grid-item a img:hover {
+    border-radius: 50%;
+    background-color: #cdffcb;
+}
+.anncmnt-title {
+    color: black;
+    font-family: 'Poppins', sans-serif;;
+}
+/* END OF GRID LOGOS */

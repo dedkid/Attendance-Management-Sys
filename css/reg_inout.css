@@ -1,0 +1,206 @@
+/* MAIN LAYOUT */
+.makerow-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  font-size: 18px;
+}
+
+.inout-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 18px;
+  width: 100%;
+  flex-grow: 1;
+}
+
+/* TIME IN & OUT SECTIONS */
+.time-in-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  width: 100%;
+  border: 2px solid black;
+}
+
+.time-out-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  width: 100%;
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+  /* Top border is shared with Time In, so we skip to avoid double-thickness */
+  border-top: none; 
+}
+
+/* THE DYNAMIC TASKS BOX FIX */
+.input-field-text {
+  width: 100%;
+  /* CRITICAL: Changed from height: 100px to min-height */
+  min-height: 100px; 
+  height: auto;      /* Allows the box to expand with the textarea */
+  border: 2px solid black;
+  display: flex;
+}
+
+.input {
+  width: 100%;
+  min-height: 100px;
+  height: 100%;
+  border: none;      /* Parent handles the border */
+  outline: none;
+  padding: 15px;
+  /* CRITICAL: Allows user to stretch vertically without breaking layout width */
+  resize: vertical; 
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 16px;
+}
+
+/* COLUMNS & ALIGNMENT */
+.hours-column {
+  display: flex;
+  flex-direction: column;
+  margin-right: 50px;
+}
+
+.hours-item {
+  margin-bottom: 10px;
+  width: 300px;
+}
+
+.time-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  margin-right: 50px;
+}
+
+.time-logo {
+  margin-bottom: 10px;
+}
+
+/* ICONS */
+.uil {
+  font-size: 80px;
+  color: #000;
+  transition: color 0.3s ease;
+}
+
+.uil:hover {
+  color: #0bcc14;
+  cursor: pointer;
+}
+
+/* STATUS SECTION */
+.status-column {
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 300px;
+}
+
+.status {
+  margin-bottom: 10px;
+}
+
+.status-time {
+  text-align: center;
+}
+
+/* BUTTONS */
+.time-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.time-button i.uil {
+  font-size: 70px;
+  color: #000;
+}
+
+.time-button i.uil:hover {
+  color: #0bcc14;
+}
+
+/* EXPORT / UTILITY COLUMN */
+.utility-column {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  width: 300px;
+  border: 2px solid black;
+  /* Pulls the column 2px to the left so the borders overlap perfectly */
+  margin-left: -2px; 
+}
+
+.row {
+  height: 89px;
+}
+
+#end_date,
+#start_date {
+  width: 200px;
+  padding: 5px;
+}
+
+.submit {
+  width: 200px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+/* DATE & TIME DISPLAY */
+.date-time h1 {
+  font-weight: 1;
+  font-size: large;
+}
+
+.date-time span {
+  font-weight: bold;
+  font-size: larger;
+}
+
+#taskstext {
+  background-color: white !important;
+}
+
+/* --- TOP NAVIGATION FIX --- */
+#content nav {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 0 24px !important;
+}
+
+/* This targets our new class name to avoid the absolute positioning */
+.logout-btn {
+    position: static !important; /* Forces it back into the navbar flow */
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px;
+    text-decoration: none;
+    color: #DB504A !important; /* Your red color variable */
+    font-weight: 600;
+    margin-left: auto; /* Pushes it to the far right */
+}
+
+.logout-btn i {
+    font-size: 24px;
+}
+
+/* Hide the old absolute logout if it's still ghosting around */
+.logout {
+    display: none !important;
+}

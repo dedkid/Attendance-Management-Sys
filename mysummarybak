@@ -1,0 +1,362 @@
+<?php
+session_start();
+
+// Include the database connection file
+include 'connects.php';
+
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+if (!isset($_SESSION['username'])) {
+    header('Location: index.php');
+    exit;
+}
+
+$name = $_SESSION['username'];
+$position = $_SESSION['position'];
+
+if($position == "employee") {
+    $query_names = "SELECT name, department, position, start_date, work_days, work_hrs FROM emp_info WHERE name='$name'";
+} else {
+    $query_names = "SELECT name, department, position, start_date, hr_req, hr_ren, hr_left FROM int_info WHERE name='$name'";
+}
+$result_names = mysqli_query($conn, $query_names);
+$row_names = mysqli_fetch_assoc($result_names);
+
+$result_text = "";
+
+$month = isset($_GET['month']) ? $_GET['month'] : date('n');
+$year = isset($_GET['year']) ? $_GET['year'] : date('Y');
+
+$start_date = new DateTime("$year-$month-01");
+$end_date = (new DateTime("$year-$month-01"))->modify('last day of this month');
+$interval = new DateInterval('P1D');
+$daterange = new DatePeriod($start_date, $interval, $end_date);
+
+$dates = [];
+
+foreach ($daterange as $date) {
+    if ($date->format('N') != 7) { // Exclude Sundays
+        $dates[] = $date->format('D, M d, Y');
+    }
+}
+
+$result_text .= "
+<div class='tg-wrap'>
+<table style='width:100%; border-collapse: collapse;'>
+<tbody>
+                    <tr>
+                        <th class='tg-0pky'></th>
+                        <th class='tg-0pky'></th>
+                        <th class='tg-0pky'></th>
+                        <th class='tg-0pky'></th>
+                        <th class='tg-0pky'></th>";
+
+foreach ($dates as $date) {
+    $result_text .= "<th colspan='3'>" . $date . "</th>";
+}
+
+$result_text .= "
+                    <tr>
+                        <th class='tg-0pky column-name'>Name</th>
+                        <th class='tg-0pky'>Department</th>
+                        <th class='tg-0pky'>Position</th>
+                        <th class='tg-0pky'>Schedule</th>";
+
+foreach ($dates as $date) {
+    $result_text .= "   <th class='tg-0pky'></th>
+                        <th class='tg-0pky'>TI</th>
+                        <th class='tg-0pky'>TO</th>";
+}
+
+$result_text .= "</tr>";
+
+
+
+// Fetch user data from the database tables
+$sql = "SELECT u.name, IFNULL(e.department, i.department) AS department, IFNULL(e.position, i.position) AS position, IFNULL(e.work_hrs, i.work_hrs) AS work_hrs
+        FROM users u
+        LEFT JOIN emp_info e ON u.name = e.name
+        LEFT JOIN int_info i ON u.name = i.name";
+$result = mysqli_query($conn, $sql);
+
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $user = $row['name'];
+        $department = $row['department'];
+        $position = $row['position'];
+        $schedule = $row['work_hrs'];
+        $result_text .= "<tr>
+                            <td class='tg-0pky'>" . $user . "</td>
+                            <td class='tg-0pky'>" . $department . "</td>
+                            <td class='tg-0pky'>" . $position . "</td>
+                            <td class='tg-0pky'>" . $schedule . "</td>";
+
+        foreach ($dates as $date) {
+            $result_text .= "
+                              <td class='tg-0pky'></td>";
+        }
+
+        $result_text .= "</tr>";
+    }
+} else {
+    $result_text .= "<tr><td class='tg-0pky' colspan='" . ((count($dates) * 3) + 5) . "'>No users found.</td></tr>";
+}
+
+
+
+$result_text .= "
+</tbody>
+</table>
+</div>";
+?>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <!-- My CSS -->
+    <link rel="stylesheet" href="css/dtr_view.css">
+
+    <title>AMS Admin | Summary View</title>
+</head>
+
+<body>
+    <!-- SIDEBAR -->
+    <section id="sidebar">
+        <a href="admin_dash.php" class="brand">
+            <img src="images/CSK Logo.png" alt="" class="logo">
+            <span class="text">Attendance Management System</span>
+        </a>
+        <ul class="side-menu top">
+            <li>
+                <a href="admin_dash.php">
+                    <i class='bx bxs-dashboard'></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a id="switch" style="cursor: default;">
+                    <i class='bx bx-clipboard'></i>
+                    <span class="text">Attendance</span>
+                </a>
+            </li>
+            <div class="dropdown">
+                <li class="active">
+                    <a href="summary_view.php">
+                        <i class='bx bx-table'></i>
+                        <span class="text">Summary View</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="dtr_view.php">
+                        <i class='bx bx-windows'></i>
+                        <span class="text">Activities/DTRs</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="manual_inout.php">
+                        <i class='bx bx-timer'></i>
+                        <span class="text">Manual In/Out</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="leaves.php">
+                        <i class='bx bx-purchase-tag'></i>
+                        <span class="text">Leave Tagging</span>
+                    </a>
+                </li>
+            </div>
+
+            <li>
+                <a id="switch_mngmt" style="cursor: default;">
+                    <i class='bx bx-list-check'></i>
+                    <span class="text">Management</span>
+                </a>
+            </li>
+            <div class="dropdown_mngmt" style="display: none;">
+                <li>
+                    <a href="under_dev.html">
+                        <i class='bx bx-news'></i>
+                        <span class="text">Create Announcement</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="under_dev.html">
+                        <i class='bx bx-bell'></i>
+                        <span class="text">Send Notification</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="under_dev.html">
+                        <i class='bx bx-task'></i>
+                        <span class="text">Send Task</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="under_dev.html">
+                        <i class='bx bx-user-plus'></i>
+                        <span class="text">Create Account</span>
+                    </a>
+                </li>
+            </div>
+
+            <li>
+                <a href="timein_timeout.php">
+                    <i class='bx bx-time'></i>
+                    <span class="text">Time In / Out</span>
+                </a>
+            </li>
+            <li>
+                <a href="under_dev.html">
+                    <i class='bx bx-user-circle'></i>
+                    <span class="text">My Profile</span>
+                </a>
+            </li>
+            <li>
+                <a id="switch_csk" style="cursor: default;">
+                    <i class='bx bx-globe'></i>
+                    <span class="text">CSK</span>
+                </a>
+            </li>
+
+            <div class="dropdown_csk" style="display: none;">
+                <li>
+                    <a href="under_dev.html">
+                        <i class='bx bx-group'></i>
+                        <span class="text">Account List</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="under_dev.html">
+                        <i class='bx bx-body'></i>
+                        <span class="text">Organization</span>
+                    </a>
+                </li>
+            </div>
+        </ul>
+
+
+    </section>
+
+    <!-- CONTENT -->
+    <section id="content">
+        <!-- NAVBAR -->
+        <nav>
+            <i class='bx bx-menu'></i>
+            <h2><?php 
+            echo $_SESSION['username']; echo " | "; echo "AMS Admin"; echo "<br>";
+			echo $row_names['position']; echo " | "; echo $row_names['department'];
+			?></h2>
+
+            <li>
+                <a href="logout.php" class="logout">
+                    <i class='bx bxs-log-out-circle'></i>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </nav>
+
+
+        <!-- MAIN -->
+        <main>
+            <div class="input-box">
+                <ul class="box-info">
+                    <div class="input-field">
+                        <div class="date-time">
+                            <h1>Current Time and Date: <span id="live-time"></span></h1>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+            <div class="head-title">
+                <div class="left">
+                    <h1>Summary View</h1>
+                </div>
+            </div>
+
+            <!-- Filter Form -->
+            <form class="filter" action="" method="GET">
+            <div class="filter-department">
+                    <label for="month">Month:</label>
+                    <select name="month" id="month">
+                        <?php
+                        for ($i = 1; $i <= 12; $i++) {
+                            $selected = $i == $month ? 'selected' : '';
+                            echo "<option value='$i' $selected>" . date('F', mktime(0, 0, 0, $i, 1)) . "</option>";
+                        }
+                        ?>
+                    </select>
+                    <label for="year">Year:</label>
+                    <select name="year" id="year">
+                        <?php
+                        $currentYear = date('Y');
+                        for ($i = $currentYear - 10; $i <= $currentYear + 10; $i++) {
+                            $selected = $i == $year ? 'selected' : '';
+                            echo "<option value='$i' $selected>$i</option>";
+                        }
+                        ?>
+                    </select>
+                    </div>
+                    <button class="filter-btn" type="submit">Filter</button>
+            </form>
+
+            <?php echo $result_text; ?>
+
+            <form action="exportSummary_Excel.php" method="POST">
+                <div class="input-field">
+                    <input type="hidden" name="month" value="<?php echo $month; ?>">
+                    <input type="hidden" name="year" value="<?php echo $year; ?>">
+                    <input type="submit" class="submit" value="Export Summary View to Excel File">
+                </div>
+            </form>
+
+
+
+            <!-- CONTENT -->
+            <script src="js/Dashboard.js"></script>
+            <script src="js/navDropdown.js"></script>
+            <script src="js/summmaryView.js"></script>
+
+            <script>
+                function formatDate(dateNow) {
+                    const options = {
+                        weekday: 'long',
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric'
+                    };
+                    return dateNow.toLocaleDateString(undefined, options);
+                }
+
+                function updateTime() {
+                    var dateNow = new Date();
+                    var hours = dateNow.getHours();
+                    var minutes = dateNow.getMinutes();
+                    var seconds = dateNow.getSeconds();
+                    var ampm = hours >= 12 ? 'PM' : 'AM';
+
+                    hours = hours % 12;
+                    hours = hours ? hours : 12;
+
+                    hours = hours.toString().padStart(2, '0');
+                    minutes = minutes.toString().padStart(2, '0');
+                    seconds = seconds.toString().padStart(2, '0');
+
+                    var currentDate = formatDate(dateNow);
+                    document.getElementById("live-time").textContent = hours + ":" + minutes + ":" + seconds + ' ' + ampm + " | " + currentDate;
+                }
+
+                updateTime(); // Call the function initially to display the time immediately
+                setInterval(updateTime, 1000); // Call the function every second to update the time
+            </script>
+
+<?php mysqli_close($conn);?>
+</body>
+
+</html>

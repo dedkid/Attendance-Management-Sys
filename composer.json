@@ -1,0 +1,13 @@
+{
+    "name": "gabriel-garcia/attendance-management-system",
+    "description": "for csk ams",
+    "type": "project",
+    "license": "MIT License",
+    "minimum-stability": "stable",
+    "require": {"phpoffice/phpspreadsheet": "^1.28"},
+	"config": {
+		"platform": {
+			"php": "7.4"
+		}
+	}
+}

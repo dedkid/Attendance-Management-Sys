@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Under Development</title>
+  <style>
+   body {
+      font-family: Arial, sans-serif;
+      color: #FFFFFF;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      background-image: url('https://i.pinimg.com/originals/83/f6/5e/83f65e8c6efc88fabfcfbb11cf63bd8a.gif'); /* Placeholder image URL */
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(170, 255, 153, 0.3); /* Slight green tint */
+    }
+    .container {
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.9); 
+      padding: 0 7% 0 7%;
+      border-radius: 10px;
+    }
+    
+    h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow effect */
+      -webkit-text-stroke: 2px #000000; /* Black text stroke effect */
+      color: #FFFFFF; /* White font color */
+    }
+    
+    p {
+      font-size: 36px;
+      margin-bottom: 40px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow effect */
+      -webkit-text-stroke: 2px #000000; /* Black text stroke effect */
+      color: #FFFFFF; /* White font color */
+      font-weight: bolder;
+    }
+    
+    .loader-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .loader {
+      border: 8px solid #FFFFFF;
+      border-top: 8px solid #3ba460;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1.5s linear infinite;
+      margin-bottom: 20px;
+    }
+    
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+    
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+.img {
+  width: 20%;
+  background-color: white;
+  border-radius: 50%;
+  margin-top: 5%;
+}
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <img src="images/CSK Logo.png" class="img">
+    <h1>This Page is Currently Under Development</h1>
+    <p>Please check back soon for updates.</p>
+    <div class="loader-container">
+      <div class="loader"></div>
+      <p>Loading...</p>
+    </div>
+  </div>
+</body>
+
+</html>
